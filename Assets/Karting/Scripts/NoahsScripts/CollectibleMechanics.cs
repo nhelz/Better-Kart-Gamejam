@@ -6,17 +6,24 @@ public class CollectibleMechanics : MonoBehaviour
 {
     private bool canCollect = true;
     private bool thrown = false;
+    public string itemName;
     //private float maxlerptime = 3f;
     //private float throwstart;
     //private Vector3 thrownorigin;
     //private Vector3 throwntarget;
     //private Vector3 throwncenter;
     private Rigidbody rb;
+    [SerializeField]
+    private bool spawned = false;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        
+    }
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -34,7 +41,7 @@ public class CollectibleMechanics : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void Throw(Vector3 origin, Vector3 target, Quaternion startingangle)
+    public void Throw(Vector3 origin, Quaternion startingangle, float upForce, float forwardForce)
     {
         //thrownorigin = origin;
         //throwntarget = target;
@@ -44,8 +51,8 @@ public class CollectibleMechanics : MonoBehaviour
         
         //throwstart = Time.time;
         thrown = true;
-        rb.AddForce(0f, 10f, 0f, ForceMode.Impulse);
-        rb.AddForce(transform.forward * 10f, ForceMode.Impulse);
+        rb.AddForce(0f, upForce, 0f, ForceMode.Impulse);
+        rb.AddForce(transform.forward * forwardForce, ForceMode.Impulse);
         StartCoroutine(CollectCooldown());
     }
 
@@ -59,5 +66,15 @@ public class CollectibleMechanics : MonoBehaviour
     public bool CanCollect()
     {
         return canCollect;
+    }
+
+    public bool Spawned()
+    {
+        return spawned;
+    }
+
+    public void SetSpawned(bool newVal)
+    {
+        spawned = newVal;
     }
 }

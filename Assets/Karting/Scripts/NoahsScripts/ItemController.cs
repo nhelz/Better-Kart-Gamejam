@@ -15,6 +15,8 @@ public class ItemController : MonoBehaviour
     private GameObject[] DecoStackItems;
     [SerializeField]
     private GameObject[] RealStackItems;
+
+    private bool throwCooldown = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,9 +28,12 @@ public class ItemController : MonoBehaviour
     {
         transform.localPosition = new Vector3(0f, 0.5f, 0f);
         transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !throwCooldown)
         {
+            throwCooldown = true;
             RemoveFromStack();
+            StartCoroutine(Cooldown());
+
         }
         origin = transform.position;
         target = transform.position + Vector3.forward * 3;
@@ -56,6 +61,7 @@ public class ItemController : MonoBehaviour
         {
             
             DecoStackItems[collecteditems].SetActive(true);
+            DecoStackItems[collecteditems].GetComponent<ToggleItemDeco>().EnableItemDecos(item.GetComponent<CollectibleMechanics>().itemName);
             RealStackItems[collecteditems] = item;
             collecteditems++;
         }
@@ -78,11 +84,15 @@ public class ItemController : MonoBehaviour
             collecteditems--;
             DecoStackItems[collecteditems].SetActive(false);
             RealStackItems[collecteditems].SetActive(true);
-            RealStackItems[collecteditems].GetComponent<CollectibleMechanics>().Throw(transform.position, transform.position + Vector3.forward * 3, transform.rotation);
+            RealStackItems[collecteditems].GetComponent<CollectibleMechanics>().Throw(transform.position, transform.rotation, 10f, 10f);
             RealStackItems[collecteditems] = null;
         }
     }
 
-
+    private IEnumerator Cooldown()
+    {
+        yield return new WaitForSeconds(.2f);
+        throwCooldown = false;
+    }
 
 }
