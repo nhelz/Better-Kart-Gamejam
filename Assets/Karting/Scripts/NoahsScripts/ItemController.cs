@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ItemController : MonoBehaviour
 {
+    public ItemUI StackUI;
     [SerializeField]
     private Vector3 origin;
     [SerializeField]
@@ -33,7 +34,6 @@ public class ItemController : MonoBehaviour
             throwCooldown = true;
             RemoveFromStack();
             StartCoroutine(Cooldown());
-
         }
         origin = transform.position;
         target = transform.position + Vector3.forward * 3;
@@ -44,7 +44,7 @@ public class ItemController : MonoBehaviour
         //Debug.Log("Collided with: " + other.gameObject);
         if (other.gameObject.tag == "Collectible" && !IsStackFull() && other.gameObject.GetComponent<CollectibleMechanics>().CanCollect())
         {
-            Debug.Log("Got Collectible!");
+            //Debug.Log("Got Collectible!");
             other.gameObject.GetComponent<CollectibleMechanics>().PickUp();
             AddToStack(other.gameObject);
         }
@@ -62,6 +62,7 @@ public class ItemController : MonoBehaviour
             
             DecoStackItems[collecteditems].SetActive(true);
             DecoStackItems[collecteditems].GetComponent<ToggleItemDeco>().EnableItemDecos(item.GetComponent<CollectibleMechanics>().itemName);
+            StackUI.AddItem(item.GetComponent<CollectibleMechanics>().itemName);
             RealStackItems[collecteditems] = item;
             collecteditems++;
         }
@@ -81,10 +82,12 @@ public class ItemController : MonoBehaviour
     {
         if(collecteditems > 0)
         {
+            GetComponent<AudioSource>().Play();
             collecteditems--;
+            StackUI.RemoveItem();
             DecoStackItems[collecteditems].SetActive(false);
             RealStackItems[collecteditems].SetActive(true);
-            RealStackItems[collecteditems].GetComponent<CollectibleMechanics>().Throw(transform.position, transform.rotation, 10f, 10f);
+            RealStackItems[collecteditems].GetComponent<CollectibleMechanics>().Throw(transform.position, transform.rotation, 10f, 5f);
             RealStackItems[collecteditems] = null;
         }
     }

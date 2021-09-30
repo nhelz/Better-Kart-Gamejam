@@ -7,6 +7,8 @@ TagManager:
   - CrashMode
   - Checkpoint
   - Collectible
+  - EndUI
+  - Elevator
   layers:
   - Default
   - TransparentFX
@@ -24,7 +26,7 @@ TagManager:
   - Kart
   - TrainingCheckpoints
   - Collectibles
-  - 
+  - ItemController
   - 
   - 
   - 

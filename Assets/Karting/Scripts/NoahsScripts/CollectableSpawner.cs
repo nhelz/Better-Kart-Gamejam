@@ -48,7 +48,7 @@ public class CollectableSpawner : MonoBehaviour
             SpawnedItems[nextItem].SetActive(true);
             SpawnedItems[nextItem].GetComponent<CollectibleMechanics>().SetSpawned(true);
             //SpawnedItems[activeClones].GetComponent<CollectibleMechanics>().Throw(transform.position, transform.position + Vector3.forward * 3, new Quaternion(0f, Random.Range(0f, 360f), 0f, 0f));
-            SpawnedItems[nextItem].GetComponent<CollectibleMechanics>().Throw(transform.position, Quaternion.Euler(new Vector3(0f, Random.Range(-360f, 360f), 0f)), 3f, Random.Range(3f, 5f));
+            SpawnedItems[nextItem].GetComponent<CollectibleMechanics>().Throw(transform.position, Quaternion.Euler(new Vector3(0f, Random.Range(-360f, 360f), 0f)), Random.Range(3f, 5f), Random.Range(3f, 8f));
             activeClones++;
         }
         StartCoroutine(Cooldown());

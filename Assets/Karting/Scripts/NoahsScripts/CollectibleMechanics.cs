@@ -43,6 +43,7 @@ public class CollectibleMechanics : MonoBehaviour
 
     public void Throw(Vector3 origin, Quaternion startingangle, float upForce, float forwardForce)
     {
+        rb.velocity = new Vector3(0f, 0f, 0f);
         //thrownorigin = origin;
         //throwntarget = target;
         //throwncenter = (origin + target) / 2f;
@@ -61,6 +62,7 @@ public class CollectibleMechanics : MonoBehaviour
         yield return new WaitForSeconds(3f);
         thrown = false;
         canCollect = true;
+        StartCoroutine(Refresh());
     }
 
     public bool CanCollect()
@@ -76,5 +78,17 @@ public class CollectibleMechanics : MonoBehaviour
     public void SetSpawned(bool newVal)
     {
         spawned = newVal;
+    }
+
+    private IEnumerator Refresh()
+    {
+        yield return new WaitForSeconds(10f);
+        if(spawned == true)
+        {
+            SetSpawned(false);
+            gameObject.SetActive(false);
+            gameObject.GetComponentInParent<CollectableSpawner>().CaughtItem();
+        }
+        
     }
 }
